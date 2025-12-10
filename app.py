@@ -238,14 +238,16 @@ def render_customer_insights(data):
     with tab3:
         st.subheader("Satisfaction Metrics")
         if 'nps_category' in customer_df.columns:
-            nps_dist = customer_df['nps_category'].value_counts()
+            nps_dist = customer_df['nps_category'].value_counts().reset_index()
+            nps_dist.columns = ['nps_category', 'count']
             
             fig = px.bar(
-                x=nps_dist.index,
-                y=nps_dist.values,
+                nps_dist,
+                x='nps_category',
+                y='count',
                 title="Customer Distribution by NPS Category",
-                labels={'x': 'NPS Category', 'y': 'Count'},
-                color=nps_dist.values,
+                labels={'nps_category': 'NPS Category', 'count': 'Count'},
+                color='count',
                 color_continuous_scale='RdYlGn'
             )
             fig.update_layout(height=400, showlegend=False)
@@ -475,17 +477,6 @@ def main():
     }
     
     selected_page = st.sidebar.radio("Navigation", list(pages.keys()))
-    
-    st.sidebar.markdown("---")
-    st.sidebar.markdown(
-        """
-    **NovaMart Dashboard**
-    
-    Interactive analytics for omnichannel retail marketing performance.
-    
-    📧 Questions? Contact the Analytics Team
-    """
-    )
     
     # Render selected page
     page_func = pages[selected_page]
