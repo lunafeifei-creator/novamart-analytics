@@ -25,22 +25,16 @@ novamart-analytics/
 │   ├── DEPLOYMENT.md                       # Streamlit Cloud deployment guide
 │   └── PROJECT_SUMMARY.md                  # This file
 │
-├── 📊 Page Modules (pages/)
-│   ├── __init__.py                         # Package initialization
-│   ├── executive_overview.py               # KPI dashboard
-│   ├── campaign_analytics.py               # Campaign performance analysis
-│   ├── customer_insights.py                # Customer segmentation & behavior
-│   ├── product_performance.py              # Product hierarchy & sales
-│   ├── geographic_analysis.py              # Regional performance
-│   ├── attribution_funnel.py               # Attribution models & funnel
-│   └── ml_model_evaluation.py              # ML model diagnostics
+├── 📊 Application
+│   ├── app.py                              # Single-file app with all 7 pages
+│   └── config.py                           # Configuration and color schemes
 │
 ├── 🎨 Visualization Utilities (visualizations/)
 │   ├── __init__.py                         # Package initialization
 │   ├── charts.py                           # Chart creation functions (Plotly, Altair)
 │   └── utils.py                            # Data processing utilities
 │
-└── 📥 Data Files (CSV - to be added)
+└── 📥 Data Files (data/)
     ├── campaign_performance.csv            # 5,858 records
     ├── customer_data.csv                   # 5,000 records
     ├── product_sales.csv                   # 1,440 records
@@ -56,26 +50,15 @@ novamart-analytics/
 
 ## 📋 Files Created
 
-### Core Application (3 files)
-- ✅ `app.py` - Main application with sidebar navigation and data caching
+### Core Application (2 files)
+- ✅ `app.py` - Main application with all 7 pages in single file
 - ✅ `config.py` - Centralized configuration with color schemes
-- ✅ `requirements.txt` - All dependencies with pinned versions
 
 ### Documentation (4 files)
-- ✅ `README.md` - Comprehensive project documentation (400+ lines)
+- ✅ `README.md` - Comprehensive project documentation (427+ lines)
 - ✅ `QUICKSTART.md` - Quick setup guide for users
 - ✅ `DEPLOYMENT.md` - Step-by-step Streamlit Cloud deployment
 - ✅ `PROJECT_SUMMARY.md` - This file
-
-### Page Modules (8 files)
-- ✅ `pages/__init__.py` - Package initialization
-- ✅ `pages/executive_overview.py` - Executive KPIs and trends
-- ✅ `pages/campaign_analytics.py` - Campaign performance analysis
-- ✅ `pages/customer_insights.py` - Customer behavior analysis
-- ✅ `pages/product_performance.py` - Product hierarchy and sales
-- ✅ `pages/geographic_analysis.py` - Regional performance analysis
-- ✅ `pages/attribution_funnel.py` - Attribution models and funnel
-- ✅ `pages/ml_model_evaluation.py` - ML model diagnostics
 
 ### Visualization Utilities (3 files)
 - ✅ `visualizations/__init__.py` - Package initialization
@@ -217,9 +200,10 @@ SEGMENT_COLORS = {...}
 ```
 
 ### Add New Page
-1. Create `pages/new_page.py`
-2. Implement `render(data)` function
-3. Add to `pages/__init__.py`
+1. Add a new `render_<page_name>(data)` function to `app.py`
+2. Implement your visualizations in the function
+3. Add the function to the `pages` dictionary in the `main()` function
+4. The page will automatically appear in the sidebar navigation
 4. Register in sidebar in `app.py`
 
 ### Modify Layouts

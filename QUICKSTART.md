@@ -86,14 +86,14 @@ pip install -r requirements.txt --upgrade
 
 ```
 project/
-├── app.py                    ← Run this file
+├── app.py                    ← Run this file (contains all 7 pages)
 ├── config.py                 ← Edit for colors/settings
 ├── requirements.txt          ← Dependencies
-├── pages/                    ← Page modules
+├── data/                     ← CSV data files
 ├── visualizations/           ← Chart functions
 ├── .streamlit/
 │   └── config.toml          ← Streamlit settings
-└── CSV files                 ← Put data here
+└── README.md                 ← Full documentation
 ```
 
 ## 🚀 Next Steps

@@ -32,10 +32,11 @@ This dashboard provides data-driven insights across marketing campaigns, custome
 - Quarterly sales trends
 
 ### 🗺️ Geographic Analysis
+- Interactive geographic map showing state-wise performance (latitude/longitude visualization)
+- Selectable metrics for map visualization
 - State-wise revenue and customer distribution
-- Market penetration metrics
-- Customer satisfaction by region
-- Growth opportunity scoring and identification
+- Market penetration and satisfaction metrics
+- Detailed state metrics table
 
 ### 🔗 Attribution & Funnel
 - Marketing funnel visualization with conversion rates
@@ -52,35 +53,30 @@ This dashboard provides data-driven insights across marketing campaigns, custome
 
 ```
 novamart-analytics/
-├── app.py                          # Main application entry point
+├── app.py                          # Main application entry point (single-file architecture)
 ├── config.py                       # Configuration and color schemes
 ├── requirements.txt                # Python dependencies
 ├── README.md                       # Project documentation
-├── pages/                          # Streamlit pages/tabs
-│   ├── __init__.py
-│   ├── executive_overview.py       # Executive dashboard
-│   ├── campaign_analytics.py       # Campaign performance
-│   ├── customer_insights.py        # Customer analysis
-│   ├── product_performance.py      # Product metrics
-│   ├── geographic_analysis.py      # Regional analysis
-│   ├── attribution_funnel.py       # Attribution & funnel
-│   └── ml_model_evaluation.py      # ML model analysis
-├── visualizations/                 # Visualization utilities
-│   ├── __init__.py
-│   ├── charts.py                   # Chart creation functions
-│   └── utils.py                    # Data processing utilities
-└── data/                           # CSV datasets
-    ├── campaign_performance.csv
-    ├── customer_data.csv
-    ├── product_sales.csv
-    ├── lead_scoring_results.csv
-    ├── feature_importance.csv
-    ├── learning_curve.csv
-    ├── geographic_data.csv
-    ├── channel_attribution.csv
-    ├── funnel_data.csv
-    ├── customer_journey.csv
-    └── correlation_matrix.csv
+├── .streamlit/
+│   ├── config.toml                # Streamlit configuration
+│   └── secrets.toml.example        # Example secrets file
+├── .gitignore                      # Git ignore rules
+├── data/                           # CSV datasets
+│   ├── campaign_performance.csv
+│   ├── customer_data.csv
+│   ├── product_sales.csv
+│   ├── lead_scoring_results.csv
+│   ├── feature_importance.csv
+│   ├── learning_curve.csv
+│   ├── geographic_data.csv
+│   ├── channel_attribution.csv
+│   ├── funnel_data.csv
+│   ├── customer_journey.csv
+│   └── correlation_matrix.csv
+└── visualizations/                 # Visualization utilities
+    ├── __init__.py
+    ├── charts.py                   # Chart creation functions
+    └── utils.py                    # Data processing utilities
 ```
 
 ## 🚀 Getting Started
@@ -113,7 +109,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. **Place CSV datasets** in the project root directory or update paths in `app.py`
+4. **Ensure CSV datasets** are placed in the `data/` subdirectory (they should already be there)
 
 5. **Run the application**
 ```bash
@@ -135,7 +131,7 @@ The dashboard expects the following CSV files in the project root:
 | `lead_scoring_results.csv` | 2,000 | Predictions, Probabilities, Conversion Status |
 | `feature_importance.csv` | Variable | Feature Names, Importance Scores, Std Dev |
 | `learning_curve.csv` | Variable | Training Size, Training Score, Validation Score |
-| `geographic_data.csv` | 15+ | State, Customers, Revenue, Market Penetration, Satisfaction |
+| `geographic_data.csv` | 17 | State, Region, Latitude, Longitude, Total Customers, Total Revenue, Market Penetration, Customer Satisfaction |
 | `channel_attribution.csv` | 8+ | Channel Names, Attribution Model Percentages |
 | `funnel_data.csv` | 5+ | Stage, Visitor Count, Conversion Rate |
 | `customer_journey.csv` | Variable | Touchpoint Flows |
@@ -278,10 +274,18 @@ st.plotly_chart(fig, use_container_width=True)
 
 ### Adding a New Page
 
-1. Create new file in `pages/` directory
-2. Implement `render(data)` function
-3. Add import to `pages/__init__.py`
-4. Register in sidebar navigation in `app.py`
+1. Create a new `render_<page_name>(data)` function in `app.py`
+2. Implement your visualizations and content in the function
+3. Add the function to the `pages` dictionary in the `main()` function:
+```python
+pages = {
+    "📊 Executive Overview": render_executive_overview,
+    "📈 Campaign Analytics": render_campaign_analytics,
+    # Add your new page here:
+    "📌 Your New Page": render_your_page,
+}
+```
+4. The page will automatically appear in the sidebar navigation radio button menu
 
 ## 🤝 Contributing
 
