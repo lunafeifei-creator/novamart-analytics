@@ -37,7 +37,7 @@ st.markdown("""
 @st.cache_data
 def load_all_data():
     """Load all CSV datasets with caching."""
-    data_dir = Path(__file__).parent
+    data_dir = Path(__file__).parent / 'data'
     
     datasets = {}
     csv_files = [
@@ -49,7 +49,8 @@ def load_all_data():
     
     for file in csv_files:
         try:
-            datasets[file] = pd.read_csv(data_dir / f'{file}.csv')
+            file_path = data_dir / f'{file}.csv'
+            datasets[file] = pd.read_csv(file_path)
         except FileNotFoundError:
             datasets[file] = pd.DataFrame()
     
