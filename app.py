@@ -220,19 +220,19 @@ def render_customer_insights(data):
     
     with tab2:
         st.subheader("Lifetime Value by Segment")
-        if 'segment' in customer_df.columns and 'ltv' in customer_df.columns:
+        if 'customer_segment' in customer_df.columns and 'lifetime_value' in customer_df.columns:
             fig = px.box(
                 customer_df,
-                x='segment',
-                y='ltv',
+                x='customer_segment',
+                y='lifetime_value',
                 title="Lifetime Value Distribution by Segment",
-                color='segment'
+                color='customer_segment'
             )
             fig.update_layout(height=400, showlegend=False)
             st.plotly_chart(fig, use_container_width=True)
             
             # Show statistics
-            stats = customer_df.groupby('segment')['ltv'].agg(['mean', 'median', 'count'])
+            stats = customer_df.groupby('customer_segment')['lifetime_value'].agg(['mean', 'median', 'count'])
             st.dataframe(stats, use_container_width=True)
     
     with tab3:
