@@ -311,6 +311,40 @@ def render_geographic_analysis(data):
         st.warning("⚠️ Geographic data not available")
         return
     
+    # Interactive Map
+    st.subheader("Geographic Performance Map")
+    
+    if 'latitude' in geo_df.columns and 'longitude' in geo_df.columns:
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            map_metric = st.selectbox(
+                "Select Metric for Map",
+                ['total_revenue', 'total_customers', 'market_penetration', 'customer_satisfaction'],
+                key='map_metric'
+            )
+        
+        with col2:
+            st.write("")
+        
+        if map_metric in geo_df.columns:
+            fig = px.scatter_geo(
+                geo_df,
+                lat='latitude',
+                lon='longitude',
+                hover_name='state',
+                size='total_customers',
+                color=map_metric,
+                color_continuous_scale='Viridis',
+                title=f"Geographic Distribution - {map_metric.replace('_', ' ').title()}",
+                scope='asia',
+                projection='natural earth',
+                hover_data={'latitude': False, 'longitude': False}
+            )
+            fig.update_layout(height=500, geo=dict(fitbounds="locations", projection_type="natural earth"))
+            st.plotly_chart(fig, use_container_width=True)
+    
+    st.markdown("---")
     st.subheader("State-wise Performance")
     
     if 'state' in geo_df.columns:
@@ -319,7 +353,7 @@ def render_geographic_analysis(data):
         with col1:
             metric = st.selectbox(
                 "Select Metric",
-                ['revenue', 'customers', 'market_penetration', 'satisfaction'],
+                ['total_revenue', 'total_customers', 'market_penetration', 'customer_satisfaction'],
                 key='geo_metric'
             )
         
