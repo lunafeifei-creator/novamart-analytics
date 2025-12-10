@@ -112,19 +112,20 @@ def render_executive_overview(data):
             fig.update_layout(height=400, hovermode='x unified')
             st.plotly_chart(fig, use_container_width=True)
     
-    st.markdown("---")
-    
     # Channel Performance
+    st.markdown("---")
     st.subheader("Channel Performance")
     if 'channel' in campaign_df.columns and 'revenue' in campaign_df.columns:
-        channel_perf = campaign_df.groupby('channel')['revenue'].sum().sort_values(ascending=True)
+        channel_perf = campaign_df.groupby('channel')['revenue'].sum().sort_values(ascending=True).reset_index()
         
-        fig = px.barh(
-            x=channel_perf.values,
-            y=channel_perf.index,
+        fig = px.bar(
+            channel_perf,
+            y='channel',
+            x='revenue',
+            orientation='h',
             title="Revenue by Channel",
-            labels={'x': 'Revenue (₹)', 'y': 'Channel'},
-            color=channel_perf.values,
+            labels={'revenue': 'Revenue (₹)', 'channel': 'Channel'},
+            color='revenue',
             color_continuous_scale='Blues'
         )
         fig.update_layout(height=400, showlegend=False)
@@ -163,14 +164,15 @@ def render_campaign_analytics(data):
     with tab2:
         st.subheader("Regional Performance")
         if 'region' in campaign_df.columns and 'revenue' in campaign_df.columns:
-            regional = campaign_df.groupby('region')['revenue'].sum().sort_values(ascending=False)
+            regional = campaign_df.groupby('region')['revenue'].sum().sort_values(ascending=False).reset_index()
             
             fig = px.bar(
-                x=regional.index,
-                y=regional.values,
+                regional,
+                x='region',
+                y='revenue',
                 title="Revenue by Region",
-                labels={'x': 'Region', 'y': 'Revenue (₹)'},
-                color=regional.values,
+                labels={'region': 'Region', 'revenue': 'Revenue (₹)'},
+                color='revenue',
                 color_continuous_scale='Viridis'
             )
             fig.update_layout(height=400, showlegend=False)
@@ -179,11 +181,12 @@ def render_campaign_analytics(data):
     with tab3:
         st.subheader("Campaign Type Analysis")
         if 'campaign_type' in campaign_df.columns and 'spend' in campaign_df.columns:
-            campaigns = campaign_df.groupby('campaign_type')['spend'].sum().sort_values(ascending=False)
+            campaigns = campaign_df.groupby('campaign_type')['spend'].sum().sort_values(ascending=False).reset_index()
             
             fig = px.pie(
-                values=campaigns.values,
-                names=campaigns.index,
+                campaigns,
+                values='spend',
+                names='campaign_type',
                 title="Campaign Type Budget Distribution"
             )
             fig.update_layout(height=450)
@@ -264,14 +267,15 @@ def render_product_performance(data):
     with tab1:
         st.subheader("Sales by Category")
         if 'category' in product_df.columns and 'sales' in product_df.columns:
-            category_sales = product_df.groupby('category')['sales'].sum().sort_values(ascending=False)
+            category_sales = product_df.groupby('category')['sales'].sum().sort_values(ascending=False).reset_index()
             
             fig = px.bar(
-                x=category_sales.index,
-                y=category_sales.values,
+                category_sales,
+                x='category',
+                y='sales',
                 title="Sales by Product Category",
-                labels={'x': 'Category', 'y': 'Sales (₹)'},
-                color=category_sales.values,
+                labels={'category': 'Category', 'sales': 'Sales (₹)'},
+                color='sales',
                 color_continuous_scale='Blues'
             )
             fig.update_layout(height=400, showlegend=False)
@@ -280,14 +284,15 @@ def render_product_performance(data):
     with tab2:
         st.subheader("Regional Product Performance")
         if 'region' in product_df.columns and 'sales' in product_df.columns:
-            region_sales = product_df.groupby('region')['sales'].sum().sort_values(ascending=False)
+            region_sales = product_df.groupby('region')['sales'].sum().sort_values(ascending=False).reset_index()
             
             fig = px.bar(
-                x=region_sales.index,
-                y=region_sales.values,
+                region_sales,
+                x='region',
+                y='sales',
                 title="Sales by Region",
-                labels={'x': 'Region', 'y': 'Sales (₹)'},
-                color=region_sales.values,
+                labels={'region': 'Region', 'sales': 'Sales (₹)'},
+                color='sales',
                 color_continuous_scale='Greens'
             )
             fig.update_layout(height=400, showlegend=False)
@@ -322,12 +327,14 @@ def render_geographic_analysis(data):
         if metric in geo_df.columns:
             geo_sorted = geo_df.sort_values(metric, ascending=True)
             
-            fig = px.barh(
-                x=geo_sorted[metric],
-                y=geo_sorted['state'],
+            fig = px.bar(
+                geo_sorted,
+                y='state',
+                x=metric,
+                orientation='h',
                 title=f"{metric.replace('_', ' ').title()} by State",
-                labels={'x': metric.replace('_', ' ').title(), 'y': 'State'},
-                color=geo_sorted[metric],
+                labels={'state': 'State', metric: metric.replace('_', ' ').title()},
+                color=metric,
                 color_continuous_scale='Viridis'
             )
             fig.update_layout(height=500, showlegend=False)
@@ -353,8 +360,8 @@ def render_attribution_funnel(data):
             
             fig = px.bar(
                 funnel_sorted,
-                x='visitors',
                 y='stage',
+                x='visitors',
                 orientation='h',
                 title="Marketing Funnel - Visitor Journey",
                 labels={'visitors': 'Visitors', 'stage': 'Stage'},
@@ -411,10 +418,11 @@ def render_ml_evaluation(data):
         if not feat_df.empty and 'feature' in feat_df.columns and 'importance' in feat_df.columns:
             feat_sorted = feat_df.sort_values('importance', ascending=True)
             
-            fig = px.barh(
+            fig = px.bar(
                 feat_sorted,
-                x='importance',
                 y='feature',
+                x='importance',
+                orientation='h',
                 title="Feature Importance Scores",
                 labels={'importance': 'Importance Score', 'feature': 'Feature'},
                 color='importance',
